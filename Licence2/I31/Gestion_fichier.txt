@@ -1,0 +1,23 @@
+fopen("nom fichier", 'mode d'ouverture'') permet de lire un fichier
+fclose() pour fermer le fichier
+NULL: fichier inexistant
+EOF: end of file (quand on arrive a la fin du fichier lu)
+
+Ecrire dans un fichier:
+    fputc(char, fichier): ecrit un seul caractere dans le fichier
+    fputs(char * chaine, fichier): ecrit une chaine dans un fichier
+    fprintf: afficher
+
+Lire dans un fichier:
+    fgetc(fichier): lit un caractere
+    fgets(char* chaine, nbrecharalire, fichier): lit une chaine
+    fscanf: lit une chaine formatee
+
+Se deplacer dans un fichier:
+    ftell(fichier): indique à quelle position vous êtes actuellement dans le fichier
+    fseek(fichier, long deplacement, int origine): positionne le curseur à un endroit précis
+    rewind(fichier): remet le curseur au début du fichier
+
+Renommer et supprimer un fichier:
+    rename(ancien nom, nouveau nom): renomer un fichier
+    remove(fichier): supprime un fichier
