@@ -1,0 +1,476 @@
+Compte rendu TP1 & TP2
+
+MONTANARI Charlotte
+
+------ TP1 -----
+--- PARTIE A ---
+
+(1)
+
+CREATE TABLE Departement(
+    DID varchar(2),
+    Libelle varchar(20),
+    PRIMARY KEY (DID)
+);
+
+CREATE TABLE Employe(
+    EID integer CHECK (EID < 100),
+    Nom varchar(20),
+    Dept varchar(2),
+    PRIMARY KEY (EID),
+    FOREIGN KEY(Dept) REFERENCES Departement(DID)
+);
+
+(2)
+
+INSERT INTO Departement VALUES(
+    83, 'Var'
+);
+
+=> Le premier rollback ne fait rien: "there is no transaction in progress"
+
+(3)
+
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES(
+    12, 'Marseille'
+);
+ROLLBACK;
+
+=> Le ROLLBACK a annuler l'action
+
+(4)
+
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES(
+    12, 'Marseille'
+);
+COMMIT;
+
+=> Le COMMIT valide l'action
+
+(5)
+
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES(
+    06, 'Nice'
+);
+COMMIT;
+SELECT * FROM Departement;
+ROLLBACK;
+SELECT * FROM Departement;
+
+=> Le ROLLBACK ne peut pas avoir lieu car la transaction a été validé par le COMMIT
+
+(6)
+
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES(
+    06, 'Nice'
+);
+
+=> Dans le BEGIN TRANSACTION, s'il n'y a ni COMMIT, ni ROLLBACK, rien n'est validé
+donc en fermant le terminal, rien n'est ajouter dans la table
+en revanche, sans le BEGIN TRANSACTION, l'information aurait été ajouté dans la table
+
+(7)
+
+INSERT INTO Departement VALUES(
+    06, 'Nice'
+);
+
+=> Ici on remarque donc que l'information a bien été ajouté
+
+(8)
+
+BEGIN TRANSACTION;
+DELETE FROM Departement;
+ROLLBACK;
+
+=> Le ROLLBACK a annulé le DELETE des données
+
+(9)
+
+BEGIN TRANSACTION;
+DELETE FROM Departement;
+COMMIT;
+
+=> Le COMMIT a validé le DELETE des données
+
+(10)
+
+INSERT INTO Departement VALUES(
+    'C1', 'Info'
+);
+INSERT INTO Employe VALUES(
+    01, 'Quentin', 'C1'
+);
+
+(11)
+
+INSERT INTO Departement VALUES(
+    'C1', 'Informatique'
+);
+
+=> On ne peut pas faire ce INSERT car dans les deux cas, on a la même clé primaire, 
+ce qui n'est pas possible
+
+(12)
+
+INSERT INTO Employe VALUES(
+    02, 'Gregoire', 'C2'
+);
+
+=> Ce n'est pas possible car C2 ne figure pas dans la table Departement
+
+(13)
+
+DELETE FROM Departement
+WHERE DID = 'C1';
+
+=> On ne peut pas supprimer C1, car il est référencé dans la table Employe
+
+(14)
+
+ALTER TABLE Employe
+DROP CONSTRAINT Dept;
+
+=> On constate que dans la table Employe, ça a supprimé la clé étrangère
+Par contre, rien ne s'est passé dans la table Departement
+
+(15)
+
+DELETE FROM Departement;
+DELETE FROM Employe;
+
+(16)
+
+ALTER TABLE Employe
+ADD CONSTRAINT Dept_fk 
+FOREIGN KEY (Dept)
+REFERENCES Departement(DID)
+ON DELETE CASCADE;
+INSERT INTO Departement VALUES(
+    'C1', 'Informatique'
+);
+INSERT INTO Employe VALUES(
+    01, 'Quentin', 'C1'
+);
+
+(17)
+
+DELETE FROM Departement
+WHERE DID = 'C1';
+
+=> On constate qu'il a tout supprimer
+
+(18)
+
+INSERT INTO Departement VALUES(
+    'C1', 'Informatique'
+);
+INSERT INTO Employe VALUES(
+    01, 'Quentin', 'C1'
+);
+
+(19)
+
+ALTER TABLE Employe
+DROP CONSTRAINT Dept_fk;
+
+ALTER TABLE Employe
+ADD CONSTRAINT Dept_fk 
+FOREIGN KEY (Dept)
+REFERENCES Departement(DID)
+DEFERRABLE; 
+
+(20)
+
+SET CONSTRAINTS Dept_fk
+DEFERRED;
+
+(21)
+
+DELETE FROM Departement
+WHERE DID = 'C1';
+
+=> On constate qu'on ne peut pas supprimer la valeur car elle est toujours
+référencé dans la table Employe
+
+--- PARTIE B ---
+
+(2)
+
+SESSION 1:
+INSERT INTO Departement VALUES(
+    'C1', 'Informatique'
+);
+
+SESSION 2:
+INSERT INTO Departement VALUES(
+    'C2', 'Informatique'
+);
+
+=> On constate qu'il a bien ajouté les 2 valeurs C1 et C2
+et qu'on voit les mêmes tables dans la session 1 et dans la session 2
+
+(3)
+
+=> Lorsqu'on effectue 2 transactions dans chaqu'une une session différente,
+on remarque que si on fait un COMMIT dans une des session, et qu'on regarde nos tables,
+on remarque que seule l'insertion de sa session est visible, une fois que le COMMIT est fait, 
+on peut voir les tables dans les deux sessions.
+
+(4)
+
+=> Lorsqu'on essaie de mettre deux fois la même valeur même si l'on est sur 2 sessions différentes,
+on aura une erreur.
+
+(5)
+
+=> Si on ferme les sessions sans faire de COMMIT, et qu'on réouvre les sessions,
+on peut constater que la valeur qu'on avait insérer ne s'est pas enregistrée
+
+(6)
+
+=> Si on vide une table dans une session, elle se videra aussi dans l'autre.
+
+(7)
+
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES(
+    'C1', 'Info'
+);
+
+=> La valeur a bien été ajouté
+
+(8)
+
+UPDATE Departement
+SET Libelle = 'Informatique'
+WHERE DID = 'C1';
+COMMIT;
+
+=> On remarque bien que la valeur a été mise à jour
+
+(9)
+
+=> Comme la valeur a été mise à jour, celle-ci est bien visible
+
+(10)
+
+SESSION 1:
+BEGIN TRANSACTION;
+UPDATE Departement
+SET Libelle = 'Info'
+WHERE DID = 'C1';
+
+SESSION 2:
+BEGIN TRANSACTION;
+UPDATE Departement
+SET Libelle = 'BIOLOGIE'
+WHERE DID = 'C1';
+
+=> On constate que dans la session 1, la transaction a été validé,
+mais est en attente dans la session 2
+
+(11)
+
+=> En annulant les modification dans la session 1, on constate que le Libelle n'a pas changé,
+mais dans la session deux, on constate que le Libelle a été validé
+
+(12)
+
+=> En validant la première session, on constate que la deuxième session a été aussi validé
+
+(13)
+
+DELETE from Departement*;
+
+(14)
+
+SESSION 1:
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES ('C1', 'Info');
+
+SESSION 2:
+BEGIN TRANSACTION;
+INSERT INTO Employe VALUES (01, 'HENRI', 'C1');
+
+=> Tant qu'on n'a pas fait de COMMIT, la transaction ne peut pas être validé
+
+(15)
+
+=> En annulant l'insertion dans la session 1, celle-ci s'annule également dans la session 2
+
+(16)
+
+SESSION 1:
+BEGIN TRANSACTION;
+INSERT INTO Departement VALUES ('C1', 'Info');
+COMMIT;
+
+SESSION 2:
+BEGIN TRANSACTION;
+INSERT INTO Employe VALUES (01, 'HENRI', 'C1');
+COMMIT;
+
+=> On constate que tout s'ajoute correctement
+
+(17)
+
+DELETE FROM Departement
+WHERE DID = 'C1';
+
+=> On ne peut pas supprimer la valeur C1 car c'est une clé étrangère et dépend donc d'une autre table
+
+(18)
+
+BEGIN TRANSACTION;
+INSERT INTO Employe VALUES (02, 'GREGOIRE', 'C1');
+COMMIT;
+
+=> On constate que les valeurs ont bien été ajouté
+
+(19)
+
+SESSION 1:
+BEGIN TRANSACTION;
+UPDATE Employe
+SET Nom = 'Coleen'
+WHERE EID = 01;
+
+SESSION 2:
+BEGIN TRANSACTION;
+UPDATE Employe
+SET Nom = 'Camille'
+WHERE EID = 02;
+
+=> On constate que dans la session 1, Coleen s'est bien effectué mais pas Camille,
+et dans la session 2, Coleen s'est bien effectué mais pas Camille
+
+(20)
+
+=> Lorsqu'on COMMIT dans la session 1, on constate que Coleen a bien été validé et également dans la session 2,
+et Camille n'est toujours pas visible.
+Après le COMMIT dans la session 2, on constate que tout a été validé
+
+------ TP2 -----
+
+CREATE TABLE Spectacle(
+    nomS VARCHAR(15) NOT NULL PRIMARY KEY,
+    Nbplaces INTEGER NOT NULL,
+    NbplacesLibres INTEGER NOT NULL,
+    tarif DECIMAL(10,2) NOT NULL
+);
+CREATE TABLE Client(
+    nomC VARCHAR(10) NOT NULL PRIMARY KEY,
+    Solde integer NOT NULL
+);
+CREATE TABLE Reservation(
+    nomC VARCHAR(10) NOT NULL references Client,
+    nomS VARCHAR(15) NOT NULL references Spectacle,
+    NbplacesReservees INT NOT NULL,
+    PRIMARY KEY (nomC, nomS)
+);
+
+=> Pour que la base de données reste cohérente, il faut toujours que pour un spectacle donné, 
+on est la propriété suivante :
+- sum(NbplacesReservees)=(NbPlaces−NbplacesLibres)
+
+(1)
+
+INSERT INTO Client VALUES ('Quentin', 50);
+INSERT INTO Client VALUES ('Grégoire', 50);
+INSERT INTO Spectacle VALUES ('Happy Potter', 250, 250, 20);
+
+CREATE OR REPLACE FUNCTION miseajour_placesReservees() 
+RETURNS TRIGGER AS $$
+    BEGIN
+        IF (new.NbplacesReservees > (select NbplacesLibres 
+                                    from Spectacle 
+                                    where Spectacle.nomS=new.nomS)) 
+        THEN
+            RETURN NULL;
+        ELSE
+            UPDATE Spectacle
+            SET NbplacesLibres = NbplacesLibres - new.NbplacesReservees
+            WHERE Spectacle.nomS = new.nomS;
+        END IF;
+             RETURN new;
+        END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TRIG_placesReservees
+BEFORE INSERT OR UPDATE ON Reservation
+FOR EACH ROW EXECUTE PROCEDURE miseajour_placesReservees();
+
+=> Création d'un trigger pour éviter de tout faire à la main
+
+(2)
+
+SESSION 1:
+BEGIN TRANSACTION;
+INSERT INTO Reservation VALUES ('Quentin','Happy Potter', 2);
+
+SESSION 2:
+BEGIN TRANSACTION;
+INSERT INTO Reservation VALUES ('Gregoire','Happy Potter', 5);
+
+=> Les valeurs ont bien été ajouté
+
+(3)
+
+DELETE * FROM Reservation;
+DELETE * FROM Spectacle;
+DELETE * FROM Client;
+
+(4)
+
+SESSION 1:
+INSERT INTO Reservation VALUES ('Quentin','Happy Potter', 2);
+INSERT INTO Client VALUES ('THOMAS', 100);
+
+SESSION 2:
+INSERT INTO Reservation VALUES ('Gregoire','Happy Potter', 5);
+COMMIT;
+
+=> Comme on n'a pas fait de COMMIT, on ne voit pas la table dans la deuxième session
+
+(5) MODE READ COMMITTED
+
+SESSION 1:
+BEGIN TRANSACTION;
+INSERT INTO Reservation VALUE ('Quentin', 'Harry potter', 2);
+UPDATE Reservation 
+SET NbplacesReservees = 10 
+WHERE Nomc = 'Quentin';
+COMMIT;
+
+SESSION 2:
+BEGIN TRANSACTION;
+SELECT * FROM Reservation;
+SELECT * FROM Reservation;
+
+=> Dans la session 2, au moment du SELECT, le COMMIT n'est pas encore fait, ce qui a pour conséquence
+de ne pas afficher les valeurs dans la session 2.
+Après le COMMIT, toute les valeurs s'affiche bien
+
+=> Le mode READ COMMITED ne permet pas les dirty reads mais permet les non REPEATABLE READ
+
+(5) MODE REPEATABLE READ
+
+SESSION 1:
+BEGIN TRANSACTION;
+SELECT * FROM Reservation;
+SELECT * FROM Reservation;
+COMMIT;
+
+Session 2
+INSERT INTO Reservation VALUES ('Charlotte', 'cheval' , 2);
+
+=> Cette transaction permet de rajouter des valeurs dans la table
+Ce phénomène est appelé Phantom read
+
+=> le mode READ COMMITED ne permet pas les dirty reads mais permet les non REPEATABLE READ,
+alors que le MODE REPEATABLE READ permet d'éviter ces non repeatable read mais permet les PHANTOM READ
