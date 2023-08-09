@@ -1,0 +1,300 @@
+Grammar
+
+    0 $accept: PROG $end
+
+    1 PROG: PROG EXP FIN
+    2     | /* empty */
+
+    3 EXP: NB
+    4    | EXP PLUS EXP
+    5    | EXP MOINS EXP
+    6    | EXP DIV EXP
+    7    | EXP MUL EXP
+    8    | EXP PUIS EXP
+    9    | PO EXP PF
+   10    | MEM
+   11    | MEM AFFECT EXP
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+NB (258) 3
+PLUS (259) 4
+MOINS (260) 5
+MUL (261) 7
+DIV (262) 6
+PUIS (263) 8
+PO (264) 9
+PF (265) 9
+MEM (266) 10 11
+AFFECT (267) 11
+FIN (268) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (14)
+    on left: 0
+PROG (15)
+    on left: 1 2, on right: 0 1
+EXP (16)
+    on left: 3 4 5 6 7 8 9 10 11, on right: 1 4 5 6 7 8 9 11
+
+
+state 0
+
+    0 $accept: . PROG $end
+
+    $default  reduce using rule 2 (PROG)
+
+    PROG  go to state 1
+
+
+state 1
+
+    0 $accept: PROG . $end
+    1 PROG: PROG . EXP FIN
+
+    $end  shift, and go to state 2
+    NB    shift, and go to state 3
+    PO    shift, and go to state 4
+    MEM   shift, and go to state 5
+
+    EXP  go to state 6
+
+
+state 2
+
+    0 $accept: PROG $end .
+
+    $default  accept
+
+
+state 3
+
+    3 EXP: NB .
+
+    $default  reduce using rule 3 (EXP)
+
+
+state 4
+
+    9 EXP: PO . EXP PF
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 7
+
+
+state 5
+
+   10 EXP: MEM .
+   11    | MEM . AFFECT EXP
+
+    AFFECT  shift, and go to state 8
+
+    $default  reduce using rule 10 (EXP)
+
+
+state 6
+
+    1 PROG: PROG EXP . FIN
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+
+    PLUS   shift, and go to state 9
+    MOINS  shift, and go to state 10
+    MUL    shift, and go to state 11
+    DIV    shift, and go to state 12
+    PUIS   shift, and go to state 13
+    FIN    shift, and go to state 14
+
+
+state 7
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+    9    | PO EXP . PF
+
+    PLUS   shift, and go to state 9
+    MOINS  shift, and go to state 10
+    MUL    shift, and go to state 11
+    DIV    shift, and go to state 12
+    PUIS   shift, and go to state 13
+    PF     shift, and go to state 15
+
+
+state 8
+
+   11 EXP: MEM AFFECT . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 16
+
+
+state 9
+
+    4 EXP: EXP PLUS . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 17
+
+
+state 10
+
+    5 EXP: EXP MOINS . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 18
+
+
+state 11
+
+    7 EXP: EXP MUL . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 19
+
+
+state 12
+
+    6 EXP: EXP DIV . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 20
+
+
+state 13
+
+    8 EXP: EXP PUIS . EXP
+
+    NB   shift, and go to state 3
+    PO   shift, and go to state 4
+    MEM  shift, and go to state 5
+
+    EXP  go to state 21
+
+
+state 14
+
+    1 PROG: PROG EXP FIN .
+
+    $default  reduce using rule 1 (PROG)
+
+
+state 15
+
+    9 EXP: PO EXP PF .
+
+    $default  reduce using rule 9 (EXP)
+
+
+state 16
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+   11    | MEM AFFECT EXP .
+
+    $default  reduce using rule 11 (EXP)
+
+
+state 17
+
+    4 EXP: EXP . PLUS EXP
+    4    | EXP PLUS EXP .
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+
+    MUL   shift, and go to state 11
+    DIV   shift, and go to state 12
+    PUIS  shift, and go to state 13
+
+    $default  reduce using rule 4 (EXP)
+
+
+state 18
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    5    | EXP MOINS EXP .
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+
+    MUL   shift, and go to state 11
+    DIV   shift, and go to state 12
+    PUIS  shift, and go to state 13
+
+    $default  reduce using rule 5 (EXP)
+
+
+state 19
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    7    | EXP MUL EXP .
+    8    | EXP . PUIS EXP
+
+    PUIS  shift, and go to state 13
+
+    $default  reduce using rule 7 (EXP)
+
+
+state 20
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    6    | EXP DIV EXP .
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+
+    PUIS  shift, and go to state 13
+
+    $default  reduce using rule 6 (EXP)
+
+
+state 21
+
+    4 EXP: EXP . PLUS EXP
+    5    | EXP . MOINS EXP
+    6    | EXP . DIV EXP
+    7    | EXP . MUL EXP
+    8    | EXP . PUIS EXP
+    8    | EXP PUIS EXP .
+
+    PUIS  shift, and go to state 13
+
+    $default  reduce using rule 8 (EXP)

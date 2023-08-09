@@ -1,0 +1,19 @@
+DEBUT
+	VAR A;
+	VAR B;
+	VAR N;
+	LIRE A;
+	B <- 2;
+	N <- 1;
+	TQ B < A FAIRE
+		SI A%B = 0 ALORS
+			N <- N + B;
+		FSI
+		B <- B + 1;
+	FTQ
+	SI A = N ALORS
+		AFFICHER 1;
+	SINON
+		AFFICHER 0;
+	FSI
+FIN

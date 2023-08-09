@@ -1,0 +1,950 @@
+Grammar
+
+    0 $accept: PROG $end
+
+    1 PROG: DEBUT INSTS FIN
+
+    2 INSTS: INSTS INST
+    3      | INST
+
+    4 INST: EXP ';'
+    5     | AFFICHER EXP ';'
+    6     | LIRE ID ';'
+    7     | DECLARATION ';'
+    8     | ID AFFECTATION EXP ';'
+    9     | SI COMPARAISON ALORS INSTS SINON INSTS FSI
+   10     | SI COMPARAISON ALORS INSTS FSI
+   11     | TQ COMPARAISON FAIRE INSTS FTQ
+
+   12 DECLARATION: VAR ID
+   13            | DECLARATION ',' ID
+
+   14 COMPARAISON: EXP SUPERIEUR_EGAL EXP
+   15            | EXP SUPERIEUR EXP
+   16            | EXP INFERIEUR EXP
+   17            | EXP INFERIEUR_EGAL EXP
+   18            | EXP EGAL EXP
+   19            | EXP DIFFERENT EXP
+
+   20 EXP: NB
+   21    | EXP '+' EXP
+   22    | EXP '/' EXP
+   23    | EXP '-' EXP
+   24    | EXP '*' EXP
+   25    | EXP '%' EXP
+   26    | '-' EXP
+   27    | ID
+   28    | '(' EXP ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'%' (37) 25
+'(' (40) 28
+')' (41) 28
+'*' (42) 24
+'+' (43) 21
+',' (44) 13
+'-' (45) 23 26
+'/' (47) 22
+';' (59) 4 5 6 7 8
+error (256)
+NB (258) 20
+SI (259) 9 10
+ALORS (260) 9 10
+SINON (261) 9
+FSI (262) 9 10
+TQ (263) 11
+FAIRE (264) 11
+FTQ (265) 11
+DEBUT (266) 1
+FIN (267) 1
+AFFICHER (268) 5
+LIRE (269) 6
+VAR (270) 12
+ID (271) 6 8 12 13 27
+AFFECTATION (272) 8
+DIFFERENT (273) 19
+EGAL (274) 18
+INFERIEUR (275) 16
+SUPERIEUR (276) 15
+INFERIEUR_EGAL (277) 17
+SUPERIEUR_EGAL (278) 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (33)
+    on left: 0
+PROG (34)
+    on left: 1, on right: 0
+INSTS (35)
+    on left: 2 3, on right: 1 2 9 10 11
+INST (36)
+    on left: 4 5 6 7 8 9 10 11, on right: 2 3
+DECLARATION (37)
+    on left: 12 13, on right: 7 13
+COMPARAISON (38)
+    on left: 14 15 16 17 18 19, on right: 9 10 11
+EXP (39)
+    on left: 20 21 22 23 24 25 26 27 28, on right: 4 5 8 14 15 16 17
+    18 19 21 22 23 24 25 26 28
+
+
+state 0
+
+    0 $accept: . PROG $end
+
+    DEBUT  shift, and go to state 1
+
+    PROG  go to state 2
+
+
+state 1
+
+    1 PROG: DEBUT . INSTS FIN
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INSTS        go to state 12
+    INST         go to state 13
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 2
+
+    0 $accept: PROG . $end
+
+    $end  shift, and go to state 16
+
+
+state 3
+
+   20 EXP: NB .
+
+    $default  reduce using rule 20 (EXP)
+
+
+state 4
+
+    9 INST: SI . COMPARAISON ALORS INSTS SINON INSTS FSI
+   10     | SI . COMPARAISON ALORS INSTS FSI
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    COMPARAISON  go to state 18
+    EXP          go to state 19
+
+
+state 5
+
+   11 INST: TQ . COMPARAISON FAIRE INSTS FTQ
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    COMPARAISON  go to state 20
+    EXP          go to state 19
+
+
+state 6
+
+    5 INST: AFFICHER . EXP ';'
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 21
+
+
+state 7
+
+    6 INST: LIRE . ID ';'
+
+    ID  shift, and go to state 22
+
+
+state 8
+
+   12 DECLARATION: VAR . ID
+
+    ID  shift, and go to state 23
+
+
+state 9
+
+    8 INST: ID . AFFECTATION EXP ';'
+   27 EXP: ID .
+
+    AFFECTATION  shift, and go to state 24
+
+    $default  reduce using rule 27 (EXP)
+
+
+state 10
+
+   26 EXP: '-' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 25
+
+
+state 11
+
+   28 EXP: '(' . EXP ')'
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 26
+
+
+state 12
+
+    1 PROG: DEBUT INSTS . FIN
+    2 INSTS: INSTS . INST
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    FIN       shift, and go to state 27
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INST         go to state 28
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 13
+
+    3 INSTS: INST .
+
+    $default  reduce using rule 3 (INSTS)
+
+
+state 14
+
+    7 INST: DECLARATION . ';'
+   13 DECLARATION: DECLARATION . ',' ID
+
+    ';'  shift, and go to state 29
+    ','  shift, and go to state 30
+
+
+state 15
+
+    4 INST: EXP . ';'
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+    ';'  shift, and go to state 36
+
+
+state 16
+
+    0 $accept: PROG $end .
+
+    $default  accept
+
+
+state 17
+
+   27 EXP: ID .
+
+    $default  reduce using rule 27 (EXP)
+
+
+state 18
+
+    9 INST: SI COMPARAISON . ALORS INSTS SINON INSTS FSI
+   10     | SI COMPARAISON . ALORS INSTS FSI
+
+    ALORS  shift, and go to state 37
+
+
+state 19
+
+   14 COMPARAISON: EXP . SUPERIEUR_EGAL EXP
+   15            | EXP . SUPERIEUR EXP
+   16            | EXP . INFERIEUR EXP
+   17            | EXP . INFERIEUR_EGAL EXP
+   18            | EXP . EGAL EXP
+   19            | EXP . DIFFERENT EXP
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    DIFFERENT       shift, and go to state 38
+    EGAL            shift, and go to state 39
+    INFERIEUR       shift, and go to state 40
+    SUPERIEUR       shift, and go to state 41
+    INFERIEUR_EGAL  shift, and go to state 42
+    SUPERIEUR_EGAL  shift, and go to state 43
+    '+'             shift, and go to state 31
+    '-'             shift, and go to state 32
+    '/'             shift, and go to state 33
+    '*'             shift, and go to state 34
+    '%'             shift, and go to state 35
+
+
+state 20
+
+   11 INST: TQ COMPARAISON . FAIRE INSTS FTQ
+
+    FAIRE  shift, and go to state 44
+
+
+state 21
+
+    5 INST: AFFICHER EXP . ';'
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+    ';'  shift, and go to state 45
+
+
+state 22
+
+    6 INST: LIRE ID . ';'
+
+    ';'  shift, and go to state 46
+
+
+state 23
+
+   12 DECLARATION: VAR ID .
+
+    $default  reduce using rule 12 (DECLARATION)
+
+
+state 24
+
+    8 INST: ID AFFECTATION . EXP ';'
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 47
+
+
+state 25
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+   26    | '-' EXP .
+
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 26 (EXP)
+
+
+state 26
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+   28    | '(' EXP . ')'
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+    ')'  shift, and go to state 48
+
+
+state 27
+
+    1 PROG: DEBUT INSTS FIN .
+
+    $default  reduce using rule 1 (PROG)
+
+
+state 28
+
+    2 INSTS: INSTS INST .
+
+    $default  reduce using rule 2 (INSTS)
+
+
+state 29
+
+    7 INST: DECLARATION ';' .
+
+    $default  reduce using rule 7 (INST)
+
+
+state 30
+
+   13 DECLARATION: DECLARATION ',' . ID
+
+    ID  shift, and go to state 49
+
+
+state 31
+
+   21 EXP: EXP '+' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 50
+
+
+state 32
+
+   23 EXP: EXP '-' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 51
+
+
+state 33
+
+   22 EXP: EXP '/' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 52
+
+
+state 34
+
+   24 EXP: EXP '*' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 53
+
+
+state 35
+
+   25 EXP: EXP '%' . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 54
+
+
+state 36
+
+    4 INST: EXP ';' .
+
+    $default  reduce using rule 4 (INST)
+
+
+state 37
+
+    9 INST: SI COMPARAISON ALORS . INSTS SINON INSTS FSI
+   10     | SI COMPARAISON ALORS . INSTS FSI
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INSTS        go to state 55
+    INST         go to state 13
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 38
+
+   19 COMPARAISON: EXP DIFFERENT . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 56
+
+
+state 39
+
+   18 COMPARAISON: EXP EGAL . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 57
+
+
+state 40
+
+   16 COMPARAISON: EXP INFERIEUR . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 58
+
+
+state 41
+
+   15 COMPARAISON: EXP SUPERIEUR . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 59
+
+
+state 42
+
+   17 COMPARAISON: EXP INFERIEUR_EGAL . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 60
+
+
+state 43
+
+   14 COMPARAISON: EXP SUPERIEUR_EGAL . EXP
+
+    NB   shift, and go to state 3
+    ID   shift, and go to state 17
+    '-'  shift, and go to state 10
+    '('  shift, and go to state 11
+
+    EXP  go to state 61
+
+
+state 44
+
+   11 INST: TQ COMPARAISON FAIRE . INSTS FTQ
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INSTS        go to state 62
+    INST         go to state 13
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 45
+
+    5 INST: AFFICHER EXP ';' .
+
+    $default  reduce using rule 5 (INST)
+
+
+state 46
+
+    6 INST: LIRE ID ';' .
+
+    $default  reduce using rule 6 (INST)
+
+
+state 47
+
+    8 INST: ID AFFECTATION EXP . ';'
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+    ';'  shift, and go to state 63
+
+
+state 48
+
+   28 EXP: '(' EXP ')' .
+
+    $default  reduce using rule 28 (EXP)
+
+
+state 49
+
+   13 DECLARATION: DECLARATION ',' ID .
+
+    $default  reduce using rule 13 (DECLARATION)
+
+
+state 50
+
+   21 EXP: EXP . '+' EXP
+   21    | EXP '+' EXP .
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 21 (EXP)
+
+
+state 51
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   23    | EXP '-' EXP .
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 23 (EXP)
+
+
+state 52
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   22    | EXP '/' EXP .
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    $default  reduce using rule 22 (EXP)
+
+
+state 53
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   24    | EXP '*' EXP .
+   25    | EXP . '%' EXP
+
+    $default  reduce using rule 24 (EXP)
+
+
+state 54
+
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+   25    | EXP '%' EXP .
+
+    $default  reduce using rule 25 (EXP)
+
+
+state 55
+
+    2 INSTS: INSTS . INST
+    9 INST: SI COMPARAISON ALORS INSTS . SINON INSTS FSI
+   10     | SI COMPARAISON ALORS INSTS . FSI
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    SINON     shift, and go to state 64
+    FSI       shift, and go to state 65
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INST         go to state 28
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 56
+
+   19 COMPARAISON: EXP DIFFERENT EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 19 (COMPARAISON)
+
+
+state 57
+
+   18 COMPARAISON: EXP EGAL EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 18 (COMPARAISON)
+
+
+state 58
+
+   16 COMPARAISON: EXP INFERIEUR EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 16 (COMPARAISON)
+
+
+state 59
+
+   15 COMPARAISON: EXP SUPERIEUR EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 15 (COMPARAISON)
+
+
+state 60
+
+   17 COMPARAISON: EXP INFERIEUR_EGAL EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 17 (COMPARAISON)
+
+
+state 61
+
+   14 COMPARAISON: EXP SUPERIEUR_EGAL EXP .
+   21 EXP: EXP . '+' EXP
+   22    | EXP . '/' EXP
+   23    | EXP . '-' EXP
+   24    | EXP . '*' EXP
+   25    | EXP . '%' EXP
+
+    '+'  shift, and go to state 31
+    '-'  shift, and go to state 32
+    '/'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '%'  shift, and go to state 35
+
+    $default  reduce using rule 14 (COMPARAISON)
+
+
+state 62
+
+    2 INSTS: INSTS . INST
+   11 INST: TQ COMPARAISON FAIRE INSTS . FTQ
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    FTQ       shift, and go to state 66
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INST         go to state 28
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 63
+
+    8 INST: ID AFFECTATION EXP ';' .
+
+    $default  reduce using rule 8 (INST)
+
+
+state 64
+
+    9 INST: SI COMPARAISON ALORS INSTS SINON . INSTS FSI
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INSTS        go to state 67
+    INST         go to state 13
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 65
+
+   10 INST: SI COMPARAISON ALORS INSTS FSI .
+
+    $default  reduce using rule 10 (INST)
+
+
+state 66
+
+   11 INST: TQ COMPARAISON FAIRE INSTS FTQ .
+
+    $default  reduce using rule 11 (INST)
+
+
+state 67
+
+    2 INSTS: INSTS . INST
+    9 INST: SI COMPARAISON ALORS INSTS SINON INSTS . FSI
+
+    NB        shift, and go to state 3
+    SI        shift, and go to state 4
+    FSI       shift, and go to state 68
+    TQ        shift, and go to state 5
+    AFFICHER  shift, and go to state 6
+    LIRE      shift, and go to state 7
+    VAR       shift, and go to state 8
+    ID        shift, and go to state 9
+    '-'       shift, and go to state 10
+    '('       shift, and go to state 11
+
+    INST         go to state 28
+    DECLARATION  go to state 14
+    EXP          go to state 15
+
+
+state 68
+
+    9 INST: SI COMPARAISON ALORS INSTS SINON INSTS FSI .
+
+    $default  reduce using rule 9 (INST)

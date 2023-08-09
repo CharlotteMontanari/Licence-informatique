@@ -1,0 +1,17 @@
+DEBUT 
+	VAR A;
+	VAR I;
+	LIRE A;
+	I <- 2;
+	TQ I < A FAIRE
+		SI A%I = 0 ALORS
+			I <- A;
+		FSI
+		I <- I+1;
+	FTQ
+	SI I = A ALORS
+		AFFICHER 1;
+	SINON
+		AFFICHER 0;
+	FSI
+FIN
