@@ -1,0 +1,52 @@
+Un chemin eulerien dans un graphe est un chemin qui passe par toutes les arêtes du graphe
+
+Un cycle eulerien dans un graphe est un cycle qui passe par toutes les arêtes du graphe
+
+Euler: soit un graphe sans point isolé. Il possède un cycle eulerien si et seulement 
+s'il est connexe et tous les degrés sont paires
+
+Un graphe est hamiltonien s'il existe un cycle qui passe par tous les sommets une et une seule fois
+
+On dit que 2 graphes G(X, U) et G'(X', U') sont isomorphes s'il existe une application bijective 
+qui préserve l'adjacence X->X'
+
+Classe NP: on dit qu'un problème de décision est dans la classe NP s'il existe un certificat (Algo) polynomial 
+pour vérifier une solution
+
+Un problème NP-complet est un problème de décision D de la classe NP tel que tout problème X de la classe NP vérifie X <= D
+
+On appelle arbre, un graphe qui est connexe et acycle
+
+Une clique d'ordre K dans un graphe est un sous ensemble de K-sommets deux à deux adjacent 
+(tous les sommets sont relié entre eux)
+
+Théorème d'Ore: dans un graphe d'ordre n, si pour 2 sommets non adjacents x et y on a: 
+deg(x) + deg(y) >= n alors G est hamiltonien
+
+Théorème Dirac: un graphe d'ordre n de degré >= n/2 est hamiltonien
+
+Un graphe G possède un arbre couvrant, c'est à dire un graphe partiel Y qui est un arbre 
+(avec le même ensemble de sommet) si et seulement si G est connexe
+
+Un arbre couvrant minimal est un arbre couvrant de poid (de coût) minimal. 
+Il s'agit d'un problème d'optimisation qui admet une solution polynomiale (facile)
+
+Une classification des graphes d'ordre n à Isomorphisme près, est une liste de graphe d'ordre n 2 à 2 non isomorphes, 
+tout graphe d'ordre n étant isomorphe à l'un d'eux
+
+Le stabilisateur d'un graphe est un sous groupe du groupe des permutatifs
+- le nombre de graphe isomorphe à G est égal à n ! /# stab(G)
+- G~G', alors # stab(G) = # stab(G')
+- G~G', alors stab(G) est conjugué à stab(G')
+
+La distribution des arêtes d'un graphe est un invariant
+
+Un graphe est dit plannaire s'il peut être représenté dans le plan avec des arêtes qui ne se croisent pas 
+
+Une face: surface délimité par des arêtes, par des cycles 
+
+Si G est un graphe plannaire avec f faces, m arêtes, et n sommets, alors: f-m+n=2
+
+Un graphe est plannaire si et seulement s'il est sphérique
+
+
