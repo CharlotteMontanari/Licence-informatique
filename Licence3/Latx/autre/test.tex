@@ -1,0 +1,195 @@
+\documentclass[a4paper,10pt]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage{hyperref}\hypersetup{colorlinks=true,linkcolor=Brown,citecolor=ForestGreen}
+\usepackage{multicol}
+\usepackage{lipsum}
+\usepackage{xspace}
+\usepackage{mathtools, amssymb}
+\usepackage{amsthm}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newtheorem{theoreme}{Théorème}[section]
+\newcommand{\card}[1]{\left\lvert#1\right\rvert}
+\newcommand{\ensnombre}[1]{\mathbb{#1}}
+\newcommand{\N}{\ensnombre{N}}
+\newcommand{\Z}{\ensnombre{Z}}
+\newcommand{\sphereunite}[1]{\ensnombre{S}^{#1}}
+\newcommand{\norme}[1]{\left\lVert#1\right\rVert}
+\newcommand{\coeffbinom}[2]{C_{#1}^{#2}}
+\newcommand{\diff}{\,\mathrm{d}}
+\newcommand{\mtext}[1]{\quad\text{#1}\quad}
+
+
+\begin{document}
+\section{Introduction}
+bla bla bla
+\subsection{Premier Essai}\label{subsec.toto}
+bla bla bla
+\subsection{Deuxième Essai}
+bla bla bla
+On a vu à la section~\ref{subsec.toto} à la page~\pageref{subsec.toto}
+
+\begin{center}
+\begin{tabular}{|clr|}
+\hline
+bla bla & bla bla bla & bla       \\
+\hline
+\multicolumn{2}{|c}{fusionnées} & bla bla \\
+\hline
+bla bla & bla bla bla & bla       \\
+\hline
+\end{tabular}
+\end{center}
+
+%https://www.tablesgenerator.com/ pour les tableaux
+\begin{tabular}{|r|c|l|}
+\hline
+AA  &   BBB &   C\\
+\hline
+D   &   EE  &   FFF\\
+GGG &   H   &   II\\
+\hline
+\end{tabular}
+
+\begin{multicols}{2}
+\lipsum[1]
+\begin{multicols}{2}
+\lipsum[2]
+\end{multicols}
+\lipsum[3]
+\end{multicols}
+
+Soit $f$ une fonction vérifiant
+\begin{equation}\label{eq.fonction.f}
+f(x) = 2x + 1    
+\end{equation}
+On a $f(x) - 1 = 2x$ d'après la formule \eqref{eq.fonction.f}
+
+\[
+    (x^2)^3 = x^{2^3}\]
+\[
+    F_n = 7^{2^n} + 1\]
+
+\[
+    u_{n+1} = \sqrt[n]{1+u_n}
+    \]
+
+\[
+    x_{5} = \sqrt{1+\sqrt{2+\sqrt{3+\sqrt{4+\sqrt{5}}}}}
+    \]
+
+\[
+    (\sqrt{x})^2 = x \text{ mais }  \sqrt{x^2} \neq x   \text{ en général.}
+    \]
+
+\[
+    y=x^2 \iff x=y^{1/2}
+    \]
+
+\[
+    x>0 \implies x^2\neq0
+    \]
+
+\[
+    x\in X\setminus Y \implies x \not\in Y
+    \]
+
+\[
+    x^{1/3} = x^{\frac{1}{3}} = \sqrt[3]{x}
+    \]
+
+\[
+    \sqrt{2} = 1 + \frac{1}{2+\frac{1}{2+\frac{1}{2+\frac{1}{\ddots}}}}
+    \]
+\[
+    \frac{\pi^2}{6} + \gamma = \Gamma(n) + \sqrt[n]{1+\alpha}
+    \]
+\[
+    \cos^2(x) + \sin^2(x) = 1
+    \]
+\[
+    2^{\ln(x)} = x^{\ln(2)}
+    \]
+\[
+    \sum_{n=1}^{+\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+    \]
+\[
+    \int_0^1 -\frac{\ln(1-t)}{t} dt \approx 1{,}64493
+    \]
+\[
+    \max_{  \substack{x,y \in E \\ x \cdot y = 0}  } \varphi(x)
+    \]
+\[
+    \overrightarrow{OM}
+    =
+    \underbrace{O + \vec{u}}_{\text{point}+\text{vecteur}}
+    \]
+\[
+    \lVert x \rVert = 1 \iff \langle x, x \rangle = 1
+    \]
+\[
+    \lvert\{1, 2, \dots, n\}\rvert = n
+    \]
+\[
+    \lfloor x^2+\epsilon \rfloor = \lceil \sqrt{y}+\delta \rceil
+    \]
+\[
+    \left\lfloor\sum_{n=1}^{N}{u_n}\right\rfloor^2 = N^2+N+1
+    \]
+\[
+    \left[1+\left(\int_0^{\sqrt{2}} f\right)^2\right] = \gamma
+    \]
+\[
+    \left.
+    \begin{array}{r}
+    a\in\mathbb{C}\\
+    a\not\in\mathbb{R}
+    \end{array}
+    \right]
+    \implies
+    a\in\mathbb{C}\setminus\mathbb{R}
+    \]
+\[
+    \mathbb{M} =
+    \begin{pmatrix}
+    m_{1,1} & \dots     & m_{1,n} \\
+    \vdots  & \ddots    & \vdots \\
+    m_{n,1} & \dots     & m_{n,n}
+    \end{pmatrix}
+    \]
+\begin{align*}
+    f\colon \R  & \to \R        & g\colon \R & \to \R \\
+    x           & \mapsto x^2   & x          & \mapsto \sqrt{x}
+    \end{align*}
+\begin{align*}
+    \abs{\int_{a}^{b}{(f+g)}}
+        & =    \abs{\int_{a}^{b}{f}  + \int_{a}^{b}{g}}      \\
+        & \leq \abs{\int_{a}^{b}{f}} + \abs{\int_{a}^{b}{g}} \\
+        & \leq \int_{a}^{b}{\abs{f}} + \int_{a}^{b}{\abs{g}}
+    \end{align*}
+\[
+    \sqrt{\sum_{n=0}^{+\infty} u_n}
+    =
+    \left(\int_a^b f \,\mathrm{d}t\right)^2 + \gamma \times \frac{\pi^2}{6}
+    \]
+\[
+    \lim_{x \to 0^+} f(x) = \sin \left|\frac{1-\sqrt[2]{3}}{2}\right|
+    \quad \text{mais} \quad f(0) = \ln^2 (3)
+    \]
+\[
+    \lim_{\substack{x \to 0 \\ x > 0}}
+    \frac{ \left\lfloor(\sin (x))^{\cos (x)}-(\cos x)^{\sin (x)}\right\rfloor }{x^3}
+    \]
+\[
+    \forall x \in \mathbb{R}, \quad f(x) = 0 \iff x^{1/3} + \ln(\tan(x)) = \omega
+    \]
+
+Voici un certain nombre d'ouvrages utiles. Le plus simple d'accès est~\cite{lcfr}.
+Pour de nombreuses autres références utiles, on pourra consulter~\cite[p.~3]{El03}.
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}
